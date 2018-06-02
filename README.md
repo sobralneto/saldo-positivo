@@ -1,2 +1,2 @@
-# saldo-positivo
+# Saldo Positivo
 Sistema para controle financeiro pessoal.
