@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-cloak>
     <div class="row">
       <div class="col-md-3 col-sm-12">
         <label>Tipo de conta <font color="red">*</font></label>
@@ -133,10 +133,10 @@ export default {
             this.saldoInicial = null
             setTimeout(function () {
               this.mensagens.msgSucesso = false
-            }, 2000)
+            }.bind(this), 2000)
             this.listarContas()
           })
-          .catch(function (error) {
+          .catch((error) => {
             this.mensagens.msgErro = error
           })
       }

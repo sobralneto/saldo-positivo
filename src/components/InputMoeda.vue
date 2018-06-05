@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-cloak>
     <input type="text" :id="idCampo" class="form-control" placeholder="0,00" v-model="ValorDigitado">
   </div>
 </template>
