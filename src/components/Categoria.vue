@@ -96,7 +96,7 @@ export default {
     },
     carregaListaCategorias () {
 
-      axios.post(`${this.requestUrl}/categoria/ListarCategorias`)
+      axios.post(`${this.requestUrl}/categoria/listarCategorias`)
       .then(response => {
         this.listaCategorias = response.data          
       })

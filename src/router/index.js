@@ -20,6 +20,7 @@ Vue.use(Router)
 export default new Router({
   mode: 'history',
   routes: [
+    { path: '*', name: 'error404' },
     { path: '/', redirect: '/Dashboard' },
     { path: '/Dashboard', name: 'Dashboard', component: Dashboard },
     { path: '/Conta', name: 'Conta', component: Conta },

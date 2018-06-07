@@ -48,7 +48,7 @@
     <main class="container">
       <div class="row">
         <div class="col align-content-start text-left pt-3 pb-0">
-          <router-view/> <!-- aqui vai o conteúdo da página -->
+          <router-view/>
         </div>
       </div>
     </main>
