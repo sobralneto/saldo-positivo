@@ -132,7 +132,7 @@ export default {
             this.nomeConta = ''
             this.saldoInicial = null
             setTimeout(function () {
-              this.mensagens.msgSucesso = false
+              this.mensagens.msgSucesso = ''
             }.bind(this), 2000)
             this.listarContas()
           })
