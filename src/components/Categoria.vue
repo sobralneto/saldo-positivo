@@ -4,6 +4,7 @@
       <div class="col-md-3 col-sm-12">
         <label>Grupos de Categoria <font color="red">*</font></label>
         <select class="form-control" v-model="IdGrupoCategoria">
+          <option value="0" selected>Selecione</option>
           <option v-for="gc in listaGrupoCategoria" :value="gc.IdGrupoCategoria" :key="gc.IdGrupoCategoria">{{ gc.Nome }}</option>
         </select>
       </div>
