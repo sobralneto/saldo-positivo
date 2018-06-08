@@ -19,7 +19,7 @@
       </div>
       <div class="col-md-2 col-sm-6">
         <label>Limite</label>            
-        <input-moeda id-campo="txtLimite" :valor-lancamento="limite" v-model="limite"></input-moeda>
+        <input-moeda id-campo="txtLimite" :valor-edicao="parseFloat(0)" v-model="limite"></input-moeda>
       </div>
     </div>
     <div class="row">

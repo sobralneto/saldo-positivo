@@ -1,43 +1,37 @@
 <template>
   <div v-cloak>
-    <input type="text" :id="idCampo" class="form-control" placeholder="0,00" v-model="ValorDigitado">
+    <money :id="idCampo" v-model="valorDigitado" v-bind="money" class="form-control"></money>
   </div>
 </template>
 
 <script>
+import {Money} from 'v-money'
+
 export default {
-  name: 'InputMoeda',
-  props: {
-    idCampo: String
-  },
-  computed: {
-    ValorDigitado: {
-      get()
-      {
-        let valorFormat = (!this.value) ? null : this.formatMoedaReal(this.value);
-        //fazer a formatação do valor aqui         
-        return valorFormat
-      },
-      set(c) { 
-        this.$emit('input', this.formatMoedaReal(parseFloat(c))) 
+  components: {Money},
+  data () {
+    return {
+      money: {
+        decimal: ',',
+        thousands: '.',
+        prefix: 'R$ ',
+        suffix: '',
+        precision: 2,
+        masked: false
       }
     }
   },
-  methods: {
-    formatMoedaReal (int) {
-
-      if (int) {
-          int = int.toString().replace('.','').replace(',','.')
-          
-          var tmp = int + '';
-          tmp = tmp.replace(/([0-9]{2})$/g, ",$1");
-          if (tmp.length > 6) {
-              tmp = tmp.replace(/([0-9]{3}).([0-9]{2}$)/g, ".$1,$2");
-          }
-          return tmp;
-      }
-  }
-  }
+  name: 'InputMoeda',
+  props: {
+    idCampo: String,
+    valorEdicao: Number
+  },
+  computed: {
+    valorDigitado: {
+      get(){ return this.valorEdicao },
+      set(c){ this.$emit('input', c) }
+    }
+  },
 }
 </script>
 

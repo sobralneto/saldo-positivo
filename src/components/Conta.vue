@@ -14,7 +14,7 @@
       </div>
       <div class="col-md-3 col-sm-12">
         <label>Saldo Inicial <font color="red">*</font></label>
-        <input-moeda id-campo="txtSaldoInicial" :valor-lancamento="saldoInicial" v-model="saldoInicial"></input-moeda>
+        <input-moeda id-campo="txtSaldoInicial" :valor-edicao="parseFloat(0)" v-model="saldoInicial"></input-moeda>
       </div>
     </div>
     <div class="row">
@@ -76,7 +76,7 @@ export default {
       requestUrl: process.env.VUE_APP_ROOT_API,
       idTipoConta: 0,
       nomeConta: null,
-      saldoInicial: null,
+      saldoInicial: parseFloat(0),
       listaTipoConta: [],
       listaContas: [],
       mensagens: {
@@ -126,11 +126,11 @@ export default {
         axios.post(`${this.requestUrl}/conta/cadastrar`, model, {
           headers: { 'Content-Type': 'application/json' }
         })
-          .then((response) => {
+          .then((response) => {            
             this.mensagens.msgSucesso = 'Cadastrado com sucesso'
             this.idTipoConta = 0
             this.nomeConta = ''
-            this.saldoInicial = null
+            this.saldoInicial = parseFloat(0)
             setTimeout(function () {
               this.mensagens.msgSucesso = ''
             }.bind(this), 2000)

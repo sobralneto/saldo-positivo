@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-md-3 col-sm-12">
         <label>Valor <font color="red">*</font></label>
-        <input-moeda id-campo="txtValor" v-model="lancamento.Valor"></input-moeda>
+        <input-moeda id-campo="txtValor" v-model="lancamento.Valor" :valor-edicao="parseFloat(0)"></input-moeda>
       </div>
       <div class="col-md-3 col-sm-12">
         <label>Data <font color="red">*</font></label>
@@ -107,7 +107,7 @@ export default {
       classButton: '',
       lancamento:{
         IdTipoLancamento: this.$route.params.tipo,
-        Valor: null,
+        Valor: 0,
         ValorSaida: null,
         Data: null,
         IdCategoria: 0,
@@ -251,7 +251,7 @@ export default {
         }
 
         var model = this.lancamento
-        model.Valor = parseFloat(this.lancamento.Valor) // parseFloat(replaceVirgulaMoeda(formatMoedaReal((this.lancamento.Valor))));
+        model.Valor = parseFloat(this.lancamento.Valor)
         model.ValorSaida = model.Valor
 
         axios.post(`${this.requestUrl}/lancamento/cadastrar`, model, {
