@@ -87,9 +87,9 @@
 </template>
 
 <script>
-import InputMoeda from './inputs/InputMoeda'
-import SelectCategoria from './inputs/SelectCategoria'
-import SelectConta from './inputs/SelectConta'
+import InputMoeda from '../../utilitarios/InputMoeda'
+import SelectCategoria from '../../utilitarios/SelectCategoria'
+import SelectConta from '../../utilitarios/SelectConta'
 import axios from 'axios'
 import moment from 'moment'
 

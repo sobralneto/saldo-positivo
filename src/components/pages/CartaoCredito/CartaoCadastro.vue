@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import InputMoeda from './inputs/InputMoeda'
+import InputMoeda from '../../utilitarios/InputMoeda'
 import axios from 'axios'
 
 export default {

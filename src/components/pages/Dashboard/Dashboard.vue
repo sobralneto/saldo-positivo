@@ -8,7 +8,7 @@
             <table class="table" v-if="listaContas.length">
               <tbody>
                 <tr v-for="conta in listaContas" :key="conta.IdConta">
-                  <td><img :src="require(`../assets/card_icons/${conta.ImgConta}`)" class="rounded" height="40" /></td>
+                  <td><img :src="require(`../../../assets/card_icons/${conta.ImgConta}`)" class="rounded" height="40" /></td>
                   <td style="vertical-align: middle;">
                       <p class="m-0 p-0">{{ conta.Nome }}</p>
                       <small class="text-secondary">{{ conta.NomeTipoConta }}</small>
@@ -30,7 +30,7 @@
             <table class="table" v-if="listaCartoes.length">
               <tbody>
                 <tr v-for="cartao in listaCartoes" :key="cartao.IdCartaoCredito">
-                  <td><img :src="require(`../assets/card_icons/${cartao.ImgCartao}`)" class="rounded" height="40" /></td>
+                  <td><img :src="require(`../../../assets/card_icons/${cartao.ImgCartao}`)" class="rounded" height="40" /></td>
                   <td style="vertical-align: middle;">
                       {{ cartao.Nome }}
                       <router-link class="btn btn-outline-secondary btn-sm pt-0 pb-0 float-right ml-2" :to="{ name: 'CartaoCreditoDetalhe', params: { idCartao: cartao.IdCartaoCredito} }">Fatura</router-link>
@@ -59,7 +59,6 @@ export default {
   },
   data () {
     return {
-      logo: require('../assets/card_icons/nuconta.jpg'),
       listaCartoes: [],
       listaContas: [],
       mensagens: {
