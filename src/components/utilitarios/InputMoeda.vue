@@ -28,10 +28,10 @@ export default {
   },
   computed: {
     valorDigitado: {
-      get(){ return this.valorEdicao },
-      set(c){ this.$emit('input', c) }
+      get () { return this.valorEdicao },
+      set (c) { this.$emit('input', c) }
     }
-  },
+  }
 }
 </script>
 

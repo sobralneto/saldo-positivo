@@ -20,38 +20,36 @@ export default {
   props: {
     idCampo: String
   },
-  data() {        
-    return{
+  data () {        
+    return {
       requestUrl: process.env.VUE_APP_ROOT_API,
       listaContas: [],
       listaCartoes: [],
-      idConta: 0            
+      idConta: 0
     }
   },
-  created() {
-    this.carregaDados();
+  created () {
+    this.carregaDados()
   },
   computed: {
     selected: {
       get () { return 0 },
-      set(c){ this.$emit('input', c) }
+      set (c) { this.$emit('input', c) }
     }
   },
-  methods:{    
+  methods: {
     carregaDados () {
-
       axios.post(`${this.requestUrl}/conta/listarContas`)
-      .then( (response) => {
-        this.listaContas = response.data
-      })
-      .catch()
+        .then((response) => {
+          this.listaContas = response.data
+        })
+        .catch()
 
       axios.post(`${this.requestUrl}/cartaoCredito/listarCartoes`)
-      .then(response => {
-        this.listaCartoes = response.data
-      })
-      .catch()
-
+        .then(response => {
+          this.listaCartoes = response.data
+        })
+        .catch()
     }
   }
 }

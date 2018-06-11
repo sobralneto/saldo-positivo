@@ -256,19 +256,20 @@ export default {
 
         axios.post(`${this.requestUrl}/lancamento/cadastrar`, model, {
             headers: { 'Content-Type': 'application/json' }
-        }).then((response) => {
-
-          this.mensagens.msgSucesso = 'Lançamento cadastrado com sucesso'
-          this.reset();
-          document.getElementById('txtValor').focus();
-          setTimeout(function () {
-            this.mensagens.msgSucesso = ''
-          }.bind(this), 2000)
-
         })
-        .catch((error) => {
-            this.mensagens.msgErro = "Erro ao cadastrar"
-        })
+          .then((response) => {
+
+            this.mensagens.msgSucesso = 'Lançamento cadastrado com sucesso'
+            this.reset();
+            document.getElementById('txtValor').focus();
+            setTimeout(function () {
+              this.mensagens.msgSucesso = ''
+            }.bind(this), 2000)
+
+          })
+          .catch((error) => {
+              this.mensagens.msgErro = "Erro ao cadastrar"
+          })
 
       }
     }

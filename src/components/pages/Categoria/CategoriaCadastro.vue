@@ -57,7 +57,7 @@ import axios from 'axios'
 
 export default {
   name: "Categoria",
-  data() {
+  data () {
     return {
       requestUrl: process.env.VUE_APP_ROOT_API,
       IdGrupoCategoria: 0,
@@ -71,7 +71,7 @@ export default {
       }
     };
   },
-  created() {
+  created () {
     this.carregaListaGrupoCategoria();
     this.carregaListaCategorias();
   },
@@ -86,23 +86,23 @@ export default {
     carregaListaGrupoCategoria () {
 
       axios.post(`${this.requestUrl}/categoria/listarGrupoCategorias`)
-      .then(response => {
-        this.listaGrupoCategoria = response.data        
-      })
-      .catch((error) => {
-        this.mensagens.msgErro = error
-      })
+        .then(response => {
+          this.listaGrupoCategoria = response.data        
+        })
+        .catch((error) => {
+          this.mensagens.msgErro = error
+        })
 
     },
     carregaListaCategorias () {
 
       axios.post(`${this.requestUrl}/categoria/listarCategorias`)
-      .then(response => {
-        this.listaCategorias = response.data          
-      })
-      .catch((error) => {
-        this.mensagens.msgErro = error
-      })
+        .then(response => {
+          this.listaCategorias = response.data          
+        })
+        .catch((error) => {
+          this.mensagens.msgErro = error
+        })
 
     },
     cadastrarCategoria () {
@@ -120,24 +120,24 @@ export default {
 
         axios.post(`${this.requestUrl}/categoria/cadastrar`, model, {
           headers: { 'Content-Type': 'application/json' }
-        }).then(response => {
-
-          this.mensagens.msgSucesso = 'Cadastro efetuado com sucesso'
-          this.NomeCategoria = ''
-          document.getElementById('txtCategoria').focus
-          setTimeout(function () {
-            this.mensagens.msgSucesso = ''
-          }.bind(this), 2000)
-          this.carregaListaCategorias()
         })
-        .catch((error) => {
-          this.mensagens.msgErro = error
-        })
+          .then((response) => {
 
-      }        
-    } 
+            this.mensagens.msgSucesso = 'Cadastro efetuado com sucesso'
+            this.NomeCategoria = ''
+            document.getElementById('txtCategoria').focus()
+            setTimeout(function () {
+              this.mensagens.msgSucesso = ''
+            }.bind(this), 2000)
+            this.carregaListaCategorias()
+          })
+          .catch((error) => {
+            this.mensagens.msgErro = error
+          })
+      }
+    }
   }
-};
+}
 </script>
 
 <style scoped>

@@ -15,29 +15,30 @@ export default {
   props: {
     idCampo: String
   },
-  data() {        
-    return{
+  data () {        
+    return {
       requestUrl: process.env.VUE_APP_ROOT_API,
       listaCategorias: [],
       idCategoria: 0            
     }
   },
-  created() {
+  created () {
     this.carregaDados();
   },
   computed: {
     selected: {
-      get(){ return 0 },
-      set(c){ this.$emit('input', c) }
+      get () { return 0 },
+      set (c) { this.$emit('input', c) }
     }
   },
-  methods:{    
+  methods: {
+
     carregaDados () {
       axios.post(`${this.requestUrl}/categoria/listarCategorias`)
-      .then( (response) => {
-        this.listaCategorias = response.data
-      })
-      .catch()
+        .then((response) => {
+          this.listaCategorias = response.data
+        })
+        .catch()
     }
   }
 }
