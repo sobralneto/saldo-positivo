@@ -11,7 +11,6 @@
         <tabela-lancamentos></tabela-lancamentos>
       </div>
     </div>
-
   </div>
 </template>
 

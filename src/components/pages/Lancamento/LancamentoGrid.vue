@@ -20,11 +20,11 @@
               <td style="vertical-align: middle;">{{ lt.Descricao }}</td>
               <td style="vertical-align: middle;"><font v-bind:class="getColorMoney(lt.Valor)">{{ lt.Valor | formataMoeda}}</font></td>
               <td style="vertical-align: middle;">{{ lt.DataVencimentoString }}</td>
-              <td style="vertical-align: middle;">
+              <td style="vertical-align: middle;" v-if="!filtro.idCartaoCredito">
                 <i v-show="lt.IdLancamento" style="cursor: pointer;" v-on:click="quitarLancamento(lt)" v-bind:class="getClassStatus(lt.IndPaga)" data-toggle="tooltip" data-placement="right" title="Quitar lançamento">grade</i>
               </td>
               <td style="vertical-align: middle;">
-                <a v-if="lt.IdConta == 0" class="btn btn-outline-secondary btn-sm pt-0 pb-0 float-right ml-2" v-bind:href="'/Restrita/cartaoCredito/Detalhar/' + lt.IdCartaoCredito" >Fatura</a>
+                <router-link v-if="lt.IdConta == 0 && !filtro.idCartaoCredito" class="btn btn-outline-secondary btn-sm pt-0 pb-0 float-right ml-2" :to="{ name: 'CartaoCreditoDetalhe', params: { idCartao: lt.IdCartaoCredito} }">Fatura</router-link>
                 <button v-if="lt.IdLancamento" class="btn btn-outline-danger btn-sm pt-0 pb-0 float-right ml-2" v-on:click="excluirLancamento(lt)">Excluir</button>
                 <button v-if="lt.IdConta !== 0" class="btn btn-outline-primary btn-sm pt-0 pb-0 float-right" v-on:click="abreModalEdicao(index)">Editar</button>
               </td>
@@ -86,8 +86,9 @@
           classHeaderModal: 'modal-header bg-primary text-white'
         },
         filtro: {
-          mesVigenteInt: null,
-          anoVigente: null
+          idCartaoCredito: this.$store.state.filtroConsulta.idContaCartao, 
+          mesVigenteInt: this.$store.state.filtroConsulta.mesVigenteInt,
+          anoVigente: this.$store.state.filtroConsulta.anoVigente
         }
       }
     },
@@ -106,8 +107,9 @@
         this.mensagens.msgErro = ''
 
         var model = {
-            MesVigenteId: parseInt(this.filtro.mesVigenteInt),
-            AnoVigenteId: parseInt(this.filtro.anoVigente)
+          IdCartaoCredito: (parseInt(this.filtro.idCartaoCredito) == 0) ? null : parseInt(this.filtro.idCartaoCredito),
+          MesVigenteId: parseInt(this.filtro.mesVigenteInt),
+          AnoVigenteId: parseInt(this.filtro.anoVigente)
         }
         
         axios.post(`${this.requestUrl}/lancamento/listar`, model, {
@@ -178,14 +180,16 @@
       },
 
       quitarLancamento (objectLancamento) {
-        
+
         var model = {
             idLancamento: parseInt(objectLancamento.IdLancamento),
-            status: !objectLancamento.IndPaga
+            status: (objectLancamento.IndPaga) ? 0 : 1 
+            //se true: troca para não quitada | se false: troca para quitada
         }
 
-        axios.post(`${this.requestUrl}/lancamento/quitar`, model, {
-          headers: { 'Content-Type': 'application/json' }
+        axios.get(`${this.requestUrl}/lancamento/quitar`, {
+          headers: { 'Content-Type': 'application/json' },
+          params: model
         })
           .then(response => {                        
             
@@ -202,13 +206,13 @@
         
         var model = {
             idLancamento: parseInt(objectLancamento.IdLancamento),
-            vinculoLancamentos: objectLancamento.VinculoEntreLancamentos
+            vinculoLancamentos: objectLancamento.VinculoEntreLancamentos.toString()
         }
 
-        axios.post(`${this.requestUrl}/lancamento/excluir`, model, {
-          headers: { 'Content-Type': 'application/json' }
-        })
-          .then((response) => {                        
+        axios.get(`${this.requestUrl}/lancamento/excluir`, {
+          headers: { 'Content-Type': 'application/json' },
+          params: model
+        }).then( (response) => {                        
             
             console.log('response', response)
 
@@ -220,9 +224,9 @@
               this.mensagens.msgErro = "Nenhum resultado encontrado";
             
           })
-          .catch((error) => {
+          .catch( (error) => {
             console.log('error', error)
-            this.mensagens.msgErro = "Ocorreu algum erro no carregamento dos dados"
+            this.mensagens.msgErro = error
           })
 
       }

@@ -29,16 +29,19 @@
 
   export default  {
     name: 'FiltroLancamento',
-    data() {
+    data () {
       return {
         filtro: {
-          idContaCartao: null,
+          idContaCartao: this.$store.state.filtroConsulta.idContaCartao,
           mesVigenteInt: this.$store.state.filtroConsulta.mesVigenteInt,
           anoVigente: this.$store.state.filtroConsulta.anoVigente          
         },
         mesVigenteString: myLib.returnDate('monthName'),
         listaMesesFiltro:["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]
       }
+    },
+    created () {
+      this.trocaMesFiltro(0);
     },
     methods: {
       trocaMesFiltro (counter = 0) {
@@ -48,9 +51,9 @@
         this.filtro.mesVigenteInt = parseInt(dayWrapper.split("-")[1])
         this.filtro.anoVigente = parseInt(dayWrapper.split("-")[2])
         this.mesVigenteString = this.listaMesesFiltro[this.filtro.mesVigenteInt-1]
+        this.filtro.idContaCartao = (typeof this.$route.params.idCartao !== 'undefined') ? this.$route.params.idCartao : null
 
-        
-        this.$store.commit('SET_FILTRO_CONSULTA', this.filtro);
+        this.$store.commit('SET_FILTRO_CONSULTA', this.filtro)
 
       }
     },
