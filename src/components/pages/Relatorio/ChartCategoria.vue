@@ -39,8 +39,7 @@
           chartCategoriaDespesa: null
         }
       }
-    },
-    
+    },    
     mounted () {
       this.getChartData()
     },
@@ -77,8 +76,6 @@
 
             this.resultadoGrafico.forEach(obj =>{
 
-              console.log(obj)
-              
               if (parseFloat(obj.ValorLancamento) < 0) {
 
                 this.grafico.arrayLabelDespesa.push(`${obj.GrupoCategoria} | Valor: R$ ${myLib.formatMoedaReal(parseFloat((-1) * obj.ValorLancamento).toFixed(2))}`)
@@ -95,9 +92,8 @@
 
             })
 
-            console.log(this.grafico.arrayValorDespesa)
-
-            this.createChart()            
+            this.createChartReceita()
+            this.createChartDespesa()
 
           })
           .catch((error) => {
@@ -106,113 +102,149 @@
 
       },
 
-      createChart () {
+      createChartReceita () {
 
         let _arrayValorReceita = this.grafico.arrayValorReceita
         let _arrayLabelReceita = this.grafico.arrayLabelReceita
 
+        let canvasReceita = document.getElementById('chart-categoria-receita')
+
+        if (this.grafico.chartCategoriaReceita != null) {
+
+          this.grafico.chartCategoriaReceita.data.labels = _arrayLabelReceita
+          this.grafico.chartCategoriaReceita.data.datasets = [];
+          this.grafico.chartCategoriaReceita.data.datasets.push({
+            labels: _arrayLabelReceita,
+              data: _arrayValorReceita,
+              backgroundColor: palette('tol-dv', _arrayValorReceita.length).map(function (hex) {
+                return '#' + hex;
+              })
+            })
+          this.grafico.chartCategoriaReceita.update();
+
+        } else {
+          
+          this.grafico.chartCategoriaReceita = new Chart(canvasReceita, {
+            type: 'doughnut',
+            data: {
+              labels: _arrayLabelReceita,
+              datasets: [{
+                labels: _arrayLabelReceita,
+                data: _arrayValorReceita,
+                backgroundColor: palette('tol-dv', _arrayValorReceita.length).map(function (hex) {
+                  return '#' + hex;
+                })
+              }]
+            },
+            options: {
+              title: {
+                display: true,
+                text: 'Receitas'
+              },
+              legend: { position: 'right' },
+              responsive: true,
+              animations: {
+                animateScale: true,
+                animateRotate: true
+              },
+              pieceLabel: {
+                mode: 'percentage',
+                precision: 0,
+                fontSize: 18,
+                fontColor: '#fff',
+                fontFamily: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
+              },
+              tooltips: {
+                callbacks: {
+                  label: function (tooltipItem, data) {
+                    return data.labels[tooltipItem.index];
+                  }
+                }
+              }
+            },
+            elements: {
+              center: {
+                text: eval(_arrayValorReceita.join("+")),
+                fontStyle: 'Helvetica', //Default Arial
+                sidePadding: 50 //Default 20 (as a percentage)
+              }
+            }
+          })
+
+        }
+        
+      },
+
+      createChartDespesa () {
+
         let _arrayValorDespesa = this.grafico.arrayValorDespesa
         let _arrayLabelDespesa = this.grafico.arrayLabelDespesa
               
+        let canvasReceita = document.getElementById('chart-categoria-despesa')
 
-        var datasetReceita = {
-          labels: _arrayLabelReceita,
-          data: _arrayValorReceita,
-          backgroundColor: palette('tol-rainbow', _arrayValorReceita.length, 2).map(function (hex) {
-            return '#' + hex;
-          })
-        };
+        if (this.grafico.chartCategoriaDespesa != null) {
 
-        var elementsReceitas = {
-          center: {
-            text: eval(_arrayValorReceita.join("+")),
-            fontStyle: 'Helvetica', //Default Arial
-            sidePadding: 50 //Default 20 (as a percentage)
-          }
-        };
+          this.grafico.chartCategoriaDespesa.data.labels = _arrayLabelDespesa
+          this.grafico.chartCategoriaDespesa.data.datasets = [];
+          this.grafico.chartCategoriaDespesa.data.datasets.push({
+            labels: _arrayLabelDespesa,
+              data: _arrayValorDespesa,
+              backgroundColor: palette('tol-dv', _arrayValorDespesa.length).map(function (hex) {
+                return '#' + hex;
+              })
+            })
+          this.grafico.chartCategoriaDespesa.update();
 
-        var datasetDespesa = {
-          labels: _arrayLabelDespesa,
-          data: _arrayValorDespesa,
-          backgroundColor: palette('tol-rainbow', _arrayValorDespesa.length).map(function (hex) {
-            return '#' + hex;
-          })
-        };
-
-        var elementsDespesas = {
-          center: {
-            text: eval(_arrayValorDespesa.join("+")),
-            fontStyle: 'Helvetica', //Default Arial
-            sidePadding: 50 //Default 20 (as a percentage)
-          }
-        };
-
-        var config = {
-          type: 'doughnut',
-          data: {
-            labels: [],
-            datasets: []
-          },
-          options: {
-            title: {
-              display: true,
-              text: ''
+        } else {
+          
+          this.grafico.chartCategoriaDespesa = new Chart(canvasReceita, {
+            type: 'doughnut',
+            data: {
+              labels: _arrayLabelDespesa,
+              datasets: [{
+                labels: _arrayLabelDespesa,
+                data: _arrayValorDespesa,
+                backgroundColor: palette('tol-dv', _arrayValorDespesa.length).map(function (hex) {
+                  return '#' + hex;
+                })
+              }]
             },
-            legend: { position: 'right' },
-            responsive: true,
-            animations: {
-              animateScale: true,
-              animateRotate: true
-            },
-            pieceLabel: {
-              mode: 'percentage',
-              precision: 0,
-              fontSize: 18,
-              fontColor: '#fff',
-              fontFamily: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
-            },
-            tooltips: {
-              callbacks: {
-                label: function (tooltipItem, data) {
-                  return data.labels[tooltipItem.index];
+            options: {
+              title: {
+                display: true,
+                text: 'Despesas'
+              },
+              legend: { position: 'right' },
+              responsive: true,
+              animations: {
+                animateScale: true,
+                animateRotate: true
+              },
+              pieceLabel: {
+                mode: 'percentage',
+                precision: 0,
+                fontSize: 18,
+                fontColor: '#fff',
+                fontFamily: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
+              },
+              tooltips: {
+                callbacks: {
+                  label: function (tooltipItem, data) {
+                    return data.labels[tooltipItem.index];
+                  }
                 }
               }
+            },
+            elements: {
+              center: {
+                text: eval(_arrayValorDespesa.join("+")),
+                fontStyle: 'Helvetica', //Default Arial
+                sidePadding: 50 //Default 20 (as a percentage)
+              }
             }
-          },
-          elements: {}
-        }
+          })
 
-        var configDespesa = config;
-        configDespesa.options.title.text = 'Despesas';
-        configDespesa.data.labels = _arrayLabelDespesa;
-        configDespesa.elements = elementsDespesas;
-        configDespesa.data.datasets = [];
-        configDespesa.data.datasets.push(datasetDespesa);
-
-        //config.options.title.text = 'Receitas';
-        //config.data.labels = _arrayLabelReceita;
-        //config.elements = elementsReceitas;
-        //config.data.datasets = [];
-        //config.data.datasets.push(datasetReceita);
-
-        let canvasReceita = document.getElementById('chart-categoria-receita')
-        let canvasDespesa = document.getElementById('chart-categoria-despesa')
-
-        /*
-        if (this.grafico.chartCategoriaReceita != null) {
-          this.grafico.chartCategoriaReceita.update();
-        } else {          
-          this.grafico.chartCategoriaReceita = new Chart(canvasReceita, config);
-        }
-        */
-
-        
-        if (this.grafico.chartCategoriaDespesa != null) {
-          this.grafico.chartCategoriaDespesa.update();
-        } else {          
-          this.grafico.chartCategoriaDespesa = new Chart(canvasDespesa, config);
-        }
-        
+        }        
 
       }
 
