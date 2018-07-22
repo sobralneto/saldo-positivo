@@ -1,5 +1,8 @@
 <template>
   <div v-cloak>
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-2 pb-0 mb-3 border-bottom">
+      <h1 class="h2">Nova categoria</h1>
+    </div>
     <div class="row">
       <div class="col-md-3 col-sm-12">
         <label>Grupos de Categoria <font color="red">*</font></label>
@@ -54,9 +57,10 @@
 
 <script>
 import axios from 'axios'
+import Usuario from '../../../class/usuario'
 
 export default {
-  name: "Categoria",
+  name: 'Categoria',
   data () {
     return {
       requestUrl: process.env.VUE_APP_ROOT_API,
@@ -69,60 +73,68 @@ export default {
         msgErro: '',
         msgSucesso: ''
       }
-    };
+    }
   },
   created () {
-    this.carregaListaGrupoCategoria();
-    this.carregaListaCategorias();
+    this.carregaListaGrupoCategoria()
+    this.carregaListaCategorias()
   },
   methods: {
     checkFormCadastro () {
-
-      this.mensagens.listaErros = [];
-      if (!this.IdGrupoCategoria) this.mensagens.listaErros.push("Informe o grupo de categoria")
-      if (!this.NomeCategoria) this.mensagens.listaErros.push("Informe a categoria")
+      this.mensagens.listaErros = []
+      if (!this.IdGrupoCategoria) this.mensagens.listaErros.push('Informe o grupo de categoria')
+      if (!this.NomeCategoria) this.mensagens.listaErros.push('Informe a categoria')
       if (!this.mensagens.listaErros.length) return true
     },
     carregaListaGrupoCategoria () {
-
-      axios.post(`${this.requestUrl}/categoria/listarGrupoCategorias`)
+      axios.get(`${this.requestUrl}/categoria/listarGrupoCategorias`, {
+        crossdomain: true,
+        headers: {
+          Authorization: `Bearer ${Usuario.getToken()}`,
+          'Content-Type': 'application/json'
+        }
+      })
         .then(response => {
-          this.listaGrupoCategoria = response.data        
+          this.listaGrupoCategoria = response.data
         })
         .catch((error) => {
           this.mensagens.msgErro = error
         })
-
     },
     carregaListaCategorias () {
-
-      axios.post(`${this.requestUrl}/categoria/listarCategorias`)
+      axios.get(`${this.requestUrl}/categoria/listarCategorias`, {
+        crossdomain: true,
+        headers: {
+          Authorization: `Bearer ${Usuario.getToken()}`,
+          'Content-Type': 'application/json'
+        }
+      })
         .then(response => {
-          this.listaCategorias = response.data          
+          this.listaCategorias = response.data
         })
         .catch((error) => {
           this.mensagens.msgErro = error
         })
-
     },
     cadastrarCategoria () {
-        
-      this.mensagens.listaErros = [];
+      this.mensagens.listaErros = []
       this.mensagens.msgErro = ''
-      this.msgSucesso = '';
+      this.msgSucesso = ''
 
       if (this.checkFormCadastro()) {
-
         var model = {
-            IdGrupoCategoria: parseInt(this.IdGrupoCategoria),
-            NomeCategoria: this.NomeCategoria.toString()
+          IdGrupoCategoria: parseInt(this.IdGrupoCategoria),
+          NomeCategoria: this.NomeCategoria.toString()
         }
 
         axios.post(`${this.requestUrl}/categoria/cadastrar`, model, {
-          headers: { 'Content-Type': 'application/json' }
+          crossdomain: true,
+          headers: {
+            Authorization: `Bearer ${Usuario.getToken()}`,
+            'Content-Type': 'application/json'
+          }
         })
           .then((response) => {
-
             this.mensagens.msgSucesso = 'Cadastro efetuado com sucesso'
             this.NomeCategoria = ''
             document.getElementById('txtCategoria').focus()

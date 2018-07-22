@@ -14,13 +14,14 @@
 
 <script>
 import axios from 'axios'
+import Usuario from '../../class/usuario'
 
 export default {
   name: 'SelectConta',
   props: {
     idCampo: String
   },
-  data () {        
+  data () {
     return {
       requestUrl: process.env.VUE_APP_ROOT_API,
       listaContas: [],
@@ -39,13 +40,25 @@ export default {
   },
   methods: {
     carregaDados () {
-      axios.post(`${this.requestUrl}/conta/listarContas`)
+      axios.get(`${this.requestUrl}/conta/listarContas`, {
+        crossdomain: true,
+        headers: {
+          Authorization: `Bearer ${Usuario.getToken()}`,
+          'Content-Type': 'application/json'
+        }
+      })
         .then((response) => {
           this.listaContas = response.data
         })
         .catch()
 
-      axios.post(`${this.requestUrl}/cartaoCredito/listarCartoes`)
+      axios.get(`${this.requestUrl}/cartaoCredito/listarCartoes`, {
+        crossdomain: true,
+        headers: {
+          Authorization: `Bearer ${Usuario.getToken()}`,
+          'Content-Type': 'application/json'
+        }
+      })
         .then(response => {
           this.listaCartoes = response.data
         })

@@ -1,68 +1,166 @@
 <template>
-<div>
-    <header>
-      <nav class="navbar navbar-expand-lg sticky-top navbar-dark bg-dark align-content-center">
-        <div class="container">
-          <router-link class="navbar-brand" :to="{ name: 'Dashboard' }">Saldo Positivo</router-link>
-
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMenu" aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-
-          <div class="collapse navbar-collapse" id="navbarMenu">
-            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-              <li class="nav-item">
-                <router-link class="nav-link text-white" :to="{ name: 'Dashboard' }">Dashboard</router-link>
-              </li>
-              <li class="nav-item">
-                <router-link class="nav-link text-white" :to="{ name: 'LancamentoConsulta' }">Consulta Lançamentos</router-link>
-              </li>              
-              <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      Lançamentos
-                  </a>
-                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <router-link class="dropdown-item text-success" :to="{ name: 'Lancamento', params: { tipo: '1'} }"><i class="material-icons text-success align-bottom">fiber_manual_record</i> Receita</router-link>
-                    <router-link class="dropdown-item text-danger" :to="{ name: 'Lancamento', params: { tipo: '2'} }"><i class="material-icons text-danger align-bottom">fiber_manual_record</i> Despesa</router-link>
-                    <router-link class="dropdown-item text-dark" :to="{ name: 'Lancamento', params: { tipo: '3'} }"><i class="material-icons text-dark align-bottom">fiber_manual_record</i> Transferência</router-link>
-                  </div>
-              </li>
-              <li class="nav-item">
-                <router-link class="nav-link text-white" :to="{ name: 'Relatorio' }">Relatórios</router-link>
-              </li>
-              <li class="nav-item dropdown float-rigth">
-                  <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      Cadastros
-                  </a>
-                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <router-link class="dropdown-item" :to="{ name: 'Conta' }">Contas</router-link>
-                    <router-link class="dropdown-item" :to="{ name: 'CartaoCredito' }">Cartões de crédito</router-link>
-                    <router-link class="dropdown-item" :to="{ name: 'Categoria' }">Categorias</router-link>
-                  </div>
-              </li>
-            </ul>
-          </div>
-        </div>
+  <div v-cloak>
+    <header v-if="isAuthenticated">
+      <nav class="navbar navbar-dark fixed-top bg-gradient-indigo flex-md-nowrap p-0 shadow-sm">
+        <router-link tag='a' class="navbar-brand col-sm-4 col-md-2 pb-2 pt-2" :to="{ name: 'Dashboard' }">
+          <i style="font-size: 30px;" class="material-icons align-middle">monetization_on</i>
+          <font class="pl-0" style="font-size: 23px; vertical-align: middle; margin-left: -5px;">
+            aldo Positivo
+          </font>
+        </router-link>
+        <ul class="navbar-nav">
+          <button class="btn btn-sm btn-danger mr-3" @click="logout()">Logout</button>
+        </ul>
       </nav>
     </header>
-    <main class="container">
+    <div class="container-fluid" v-if="isAuthenticated">
       <div class="row">
-        <div class="col align-content-start text-left pt-3 pb-0">
-          <router-view/>
-        </div>
+        <nav class="col-md-2 col-sm-4 d-none d-md-block bg-light sidebar">
+          <div class="sidebar-sticky">
+            <ul class="nav flex-column">
+              <router-link tag='li' class="nav-item nav-link" :to="{ name: 'Dashboard' }">
+                Dashboard
+              </router-link>
+              <li>
+                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-2 mb-1 text-muted">
+                  <span>Lançamentos</span>
+                </h6>
+              </li>
+              <router-link tag='li' class="nav-item dropdown-item" :to="{ name: 'Lancamento', params: { tipo: '1'} }">
+                Receita
+              </router-link>
+              <router-link tag='li' class="nav-item dropdown-item" :to="{ name: 'Lancamento', params: { tipo: '2'} }">
+                Despesa
+              </router-link>
+              <router-link tag='li' class="nav-item dropdown-item" :to="{ name: 'Lancamento', params: { tipo: '3'} }">
+                Transferência
+              </router-link>
+              <router-link tag='li' class="nav-item dropdown-item" :to="{ name: 'LancamentoConsulta' }">
+                Consultar
+              </router-link>
+              <li>
+                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-2 mb-1 text-muted">
+                  <span>Cadastros</span>
+                </h6>
+              </li>
+              <router-link tag='li' class="nav-item dropdown-item" :to="{ name: 'Conta' }">Contas</router-link>
+              <router-link tag='li' class="nav-item dropdown-item" :to="{ name: 'CartaoCredito' }">Cartões de crédito</router-link>
+              <router-link tag='li' class="nav-item dropdown-item" :to="{ name: 'Categoria' }">Categorias</router-link>
+              <router-link tag='li' class="nav-item nav-link" :to="{ name: 'Relatorio' }">Relatórios</router-link>
+            </ul>
+          </div>
+        </nav>
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+          <router-view></router-view>
+        </main>
       </div>
-    </main>
+    </div>
+    <div v-else>
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
 <script>
+import firebase from 'firebase'
+import Usuario from './class/usuario'
+
 export default {
-  name: 'App'
+  name: 'App',
+  data () {
+    return {
+      isAuthenticated: Usuario.getLogado()
+    }
+  },
+  mounted () {
+
+  },
+  watch: {
+    '$store.state.verificaLogin' () {
+      this.isAuthenticated = Usuario.getLogado()
+    }
+  },
+  methods: {
+    logout () {
+      firebase.auth().signOut().then(() => {
+        Usuario.setLogado(false)
+        this.$store.commit('SET_VERIFICA_LOGIN')
+        this.$router.replace('Login')
+      })
+    }
+  }
 }
 </script>
 
 <style scoped>
-.dropdown:hover .dropdown-menu {
-  display: block;
+
+.nav-item{
+  cursor: pointer;
 }
+
+nav li.router-link-active,
+nav li.router-link-exact-active {
+  border-right: 4px solid indigo;
+  color: indigo;
+}
+
+.btn-sair:hover {
+  background: indigo;
+  color: white;
+}
+
+.nav-item:hover{
+  background: #f8f9fa;
+  color: indigo;
+  border-right: 4px solid indigo;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100; /* Behind the navbar */
+  padding: 48px 0 0; /* Height of navbar */
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+}
+
+.sidebar-sticky {
+  position: relative;
+  top: 0;
+  height: calc(100vh - 48px);
+  padding-top: .5rem;
+  overflow-x: hidden;
+  overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+}
+
+@supports ((position: -webkit-sticky) or (position: sticky)) {
+  .sidebar-sticky {
+    position: -webkit-sticky;
+    position: sticky;
+  }
+}
+
+.sidebar .nav-link {
+  font-weight: 500;
+  color: #333;
+}
+
+.sidebar-heading {
+  font-size: .75rem;
+  text-transform: uppercase;
+}
+
+[role="main"] {
+  padding-top: 48px; /* Space for fixed navbar */
+}
+
+.navbar-brand {
+  padding-top: .75rem;
+  padding-bottom: .75rem;
+  font-size: 1rem;
+  background-color: rgba(0, 0, 0, .25);
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
+}
+
 </style>

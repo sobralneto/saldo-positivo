@@ -1,5 +1,7 @@
 <template>
   <div v-cloak>
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-2 pb-0 mb-3">
+    </div>
     <div class="row">
       <div class="mx-auto">
         <filtro-lancamento></filtro-lancamento>
@@ -15,7 +17,6 @@
 </template>
 
 <script>
-
 import FiltroLancamento from '../../utilitarios/FiltroLancamento'
 import TabelaLancamentos from './LancamentoGrid'
 
@@ -27,6 +28,7 @@ export default {
   },
   data () {
     return {
+      idConta: null
     }
   }
 }

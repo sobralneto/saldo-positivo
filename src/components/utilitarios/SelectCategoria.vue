@@ -9,21 +9,22 @@
 
 <script>
 import axios from 'axios'
+import Usuario from '../../class/usuario'
 
 export default {
   name: 'SelectCategoria',
   props: {
     idCampo: String
   },
-  data () {        
+  data () {
     return {
       requestUrl: process.env.VUE_APP_ROOT_API,
       listaCategorias: [],
-      idCategoria: 0            
+      idCategoria: 0
     }
   },
   created () {
-    this.carregaDados();
+    this.carregaDados()
   },
   computed: {
     selected: {
@@ -34,7 +35,13 @@ export default {
   methods: {
 
     carregaDados () {
-      axios.post(`${this.requestUrl}/categoria/listarCategorias`)
+      axios.get(`${this.requestUrl}/categoria/listarCategorias`, {
+        crossdomain: true,
+        headers: {
+          Authorization: `Bearer ${Usuario.getToken()}`,
+          'Content-Type': 'application/json'
+        }
+      })
         .then((response) => {
           this.listaCategorias = response.data
         })

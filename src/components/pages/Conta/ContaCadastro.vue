@@ -1,5 +1,8 @@
 <template>
   <div v-cloak>
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-2 pb-0 mb-3 border-bottom">
+      <h1 class="h2">Nova conta</h1>
+    </div>
     <div class="row">
       <div class="col-md-3 col-sm-12">
         <label>Tipo de conta <font color="red">*</font></label>
@@ -12,7 +15,17 @@
         <label>Nome <font color="red">*</font></label>
         <input type="text" class="form-control" maxlength="200" v-model="nomeConta" />
       </div>
+      <div class="col-md-1 col-sm-12 mt-3 pr-0 mr-0" v-if="imgConta">
+        <img :src="require(`../../../assets/card_icons/${imgConta}`)" class="rounded p-0 m-0" style="height: 50px;" />
+      </div>
       <div class="col-md-3 col-sm-12">
+        <label>Ícone </label>
+        <select class="form-control" v-model="imgConta">
+          <option value="" selected>Selecione</option>
+          <option v-for="icon in arrayIcons" :value="icon.img" :key="icon.img">{{ icon.nome }}</option>
+        </select>
+      </div>
+      <div class="col-md-2 col-sm-12">
         <label>Saldo Inicial <font color="red">*</font></label>
         <input-moeda id-campo="txtSaldoInicial" :valor-edicao="parseFloat(0)" v-model="saldoInicial"></input-moeda>
       </div>
@@ -29,30 +42,33 @@
         <div class="alert alert-danger" role="alert" v-show="mensagens.msgErro">
           {{ mensagens.msgErro }}
         </div>
-        <div class="alert alert-success" role="alert" v-show="mensagens.msgSucesso">
+        <div class="alert alert-success mt-2" role="alert" v-show="mensagens.msgSucesso">
           {{ mensagens.msgSucesso }}
         </div>
       </div>
     </div>
     <div class="row" v-if="listaContas.length">
-      <div class="col-md-6 col-sm-12 pt-2">
-        <table class="table table-hover table-striped table-sm">
-          <caption>{{ listaContas.length }} conta(s) cadastrada(s)</caption>
-          <thead class="bg-primary text-white">
-            <tr>
-              <th><center>Tipo Conta</center></th>
-              <th><center>Conta</center></th>
-              <th><center>Saldo Inicial</center></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="conta in listaContas" :key="conta.IdConta">
-              <td>{{ conta.NomeTipoConta }}</td>
-              <td>{{ conta.Nome }}</td>
-              <td>{{ conta.SaldoInicial | formataMoeda }}</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="col-md-12 col-sm-12">
+        <div class="row">
+          <template v-for="conta in listaContas">
+            <div class="col-md-4" :key="conta.IdConta">
+              <div class="card mt-3">
+                <div class="card-body pb-0">
+                  <div class="row">
+                    <div class="col-md-3 m-0">
+                      <img :src="require(`../../../assets/card_icons/${conta.ImgConta}`)" style="height: 70px;">
+                    </div>
+                    <div class="col-md-9">
+                      <b class="font-size-4">{{ conta.Nome }}</b><br>
+                      <small>{{ conta.NomeTipoConta }}</small><br>
+                      <p><b>Saldo Inicial: </b> {{ conta.SaldoInicial | formataMoeda }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
       </div>
     </div>
   </div>
@@ -61,6 +77,7 @@
 <script>
 import InputMoeda from '../../utilitarios/InputMoeda'
 import axios from 'axios'
+import Usuario from '../../../class/usuario'
 
 export default {
   name: 'Conta',
@@ -77,6 +94,19 @@ export default {
       idTipoConta: 0,
       nomeConta: null,
       saldoInicial: parseFloat(0),
+      imgConta: '',
+      arrayIcons: [
+        {nome: 'Bradesco', img: 'bradesco.jpg'},
+        {nome: 'Caixa Econômica', img: 'caixa.jpg'},
+        {nome: 'Carteira', img: 'carteira.jpg'},
+        {nome: 'Itaú', img: 'itau.jpg'},
+        {nome: 'Mastercard', img: 'mastercard.png'},
+        {nome: 'Neon', img: 'neon.jpg'},
+        {nome: 'Next', img: 'next.jpg'},
+        {nome: 'Nubank', img: 'nuconta.jpg'},
+        {nome: 'Rico', img: 'rico.jpg'},
+        {nome: 'Visa', img: 'visa.jpg'}
+      ],
       listaTipoConta: [],
       listaContas: [],
       mensagens: {
@@ -88,7 +118,13 @@ export default {
   },
   methods: {
     listarTipoConta () {
-      axios.post(`${this.requestUrl}/conta/listarTipoConta`)
+      axios.get(`${this.requestUrl}/conta/listarTipoConta`, {
+        crossdomain: true,
+        headers: {
+          Authorization: `Bearer ${Usuario.getToken()}`,
+          'Content-Type': 'application/json'
+        }
+      })
         .then((response) => {
           this.listaTipoConta = response.data
         })
@@ -96,7 +132,13 @@ export default {
         .finally()
     },
     listarContas () {
-      axios.post(`${this.requestUrl}/conta/listarContas`)
+      axios.get(`${this.requestUrl}/conta/listarContas`, {
+        crossdomain: true,
+        headers: {
+          Authorization: `Bearer ${Usuario.getToken()}`,
+          'Content-Type': 'application/json'
+        }
+      })
         .then((response) => {
           this.listaContas = response.data
         })
@@ -120,17 +162,23 @@ export default {
         var model = {
           IdTipoConta: parseInt(this.idTipoConta),
           Nome: this.nomeConta.toString(),
-          SaldoInicial: parseFloat(this.saldoInicial)
+          SaldoInicial: parseFloat(this.saldoInicial),
+          ImgConta: this.imgConta.toString()
         }
 
         axios.post(`${this.requestUrl}/conta/cadastrar`, model, {
-          headers: { 'Content-Type': 'application/json' }
+          crossdomain: true,
+          headers: {
+            Authorization: `Bearer ${Usuario.getToken()}`,
+            'Content-Type': 'application/json'
+          }
         })
-          .then((response) => {            
+          .then((response) => {
             this.mensagens.msgSucesso = 'Cadastrado com sucesso'
             this.idTipoConta = 0
             this.nomeConta = ''
             this.saldoInicial = parseFloat(0)
+            this.imgConta = ''
             setTimeout(function () {
               this.mensagens.msgSucesso = ''
             }.bind(this), 2000)
