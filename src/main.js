@@ -17,12 +17,12 @@ Vue.use(BootstrapVue)
 
 let app
 var config = {
-  apiKey: 'AIzaSyAZwhdf8WwvhGBq9dcpLHlmMXnqde4iHQY',
-  authDomain: 'saldo-positivo.firebaseapp.com',
-  databaseURL: 'https://saldo-positivo.firebaseio.com',
-  projectId: 'saldo-positivo',
-  storageBucket: 'saldo-positivo.appspot.com',
-  messagingSenderId: '6047805400'
+  apiKey: 'YOUR_API_KEY',
+  authDomain: 'YOUR_PROJECT_ID.firebaseapp.com',
+  databaseURL: 'https://YOUR_PROJECT_ID.firebaseio.com',
+  projectId: 'YOUR_PROJECT_ID',
+  storageBucket: 'YOUR_PROJECT_ID.appspot.com',
+  messagingSenderId: 'YOUR_MESSAGING_SEND_ID'
 }
 
 firebase.initializeApp(config)
