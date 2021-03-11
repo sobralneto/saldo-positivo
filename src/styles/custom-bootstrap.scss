@@ -1,0 +1,25 @@
+// Make sure the functions come before custom variables
+@import '../../node_modules/bootstrap/scss/functions';
+// Our custom variables file
+@import './variables';
+// The bootstrap file that compiles the CSS
+@import '../../node_modules/bootstrap/scss/bootstrap';
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	margin: 0;
+	padding: 0;
+}
+
+html,
+body {
+	height: 100%;
+	min-height: 100vh;
+	scroll-behavior: smooth;
+	text-rendering: optimizeSpeed;
+	line-height: 1.5;
+}
