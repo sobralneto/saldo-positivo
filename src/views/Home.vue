@@ -26,7 +26,7 @@
 			</div>
 			<div class="col">
 				<label for="ddlCategoria">Categoria <span class="text-danger fw-bold">*</span></label>
-				<select-categoria id="ddlCategoria" v-model="model.categoriaId"></select-categoria>
+				<select-categoria id="ddlCategoria" v-model="model.categoriaId" :tipoLancamentoId="model.tipoLancamentoId"></select-categoria>
 			</div>
 			<div class="col">
 				<label for="ddlSubCategoria">Sub Categoria</label>
@@ -92,8 +92,6 @@ import LancamentoModel from '../models/lancamento-model';
 import JQUERY from 'jquery';
 import { ReplaceValoresMoeda } from '../helpers/util';
 
-import Loading from 'vue-loading-overlay';
-
 export default {
 	name: 'Home',
 	components: {
@@ -101,7 +99,7 @@ export default {
 		SelectSubCategoria: () => import('../components/SelectSubCategoria'),
 		SelectConta: () => import('../components/SelectConta'),
 		Lancamentos: () => import('../components/Lancamentos'),
-		Loading,
+		Loading: () => import('vue-loading-overlay'),
 	},
 	data() {
 		return {

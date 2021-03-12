@@ -13,4 +13,4 @@ tab_width = 2
 
 # recomando para windows
 [*]
-end_of_line = crlf
+end_of_line = lf
